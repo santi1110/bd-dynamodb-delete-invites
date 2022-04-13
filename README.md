@@ -108,7 +108,7 @@ Let's get started!
 1. Implement `MemberDao`'s `deletePermanently()` so that the test passes
 1. Try running `DeleteMemberActivityTest` (already implemented for you)
    and make sure that it fails
-1. Use the `MemberDao` method in `DeleteMemberActivity` as appropriate
+1. Use the `MemberDao` method in `DeleteMemberActivity` in the `handleRequest()` method in the `DeleteMemberActivity` class
 1. Make sure `DeleteMemberActivityTest` passes now
 1. Run the `Phase1Test` make sure it passes!
 
