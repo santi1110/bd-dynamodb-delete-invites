@@ -99,18 +99,11 @@ your next task in this sprint, and this one's yours. We'll tackle this in two st
 
 Let's get started!
 
-1. Implement a unit test in `MemberDaoTest` to cover the "happy path" for the
-   deletePermanently() method that's declared (but not implemented yet) in
-   `MemberDao`
-   1. Mock your com.amazon.ata.dynamodbdeleteiterators.classroom.dependency on `DynamoDBMapper` and `verify()` that it receives
-      a call to `DynamoDBMapper`'s `delete()` method
-1. Run the test and verify it fails before updating `MemberDao`
-1. Implement `MemberDao`'s `deletePermanently()` so that the test passes
-1. Try running `DeleteMemberActivityTest` (already implemented for you)
-   and make sure that it fails
-1. Use the `MemberDao` method in the `handleRequest()` method in the `DeleteMemberActivity` class
-1. Make sure `DeleteMemberActivityTest` passes now
-1. Run the `Phase1Test` make sure it passes!
+1. Make sure `DeleteMemberActivityTest` fails now
+2. Implement `MemberDao`'s `deletePermanently()` so that the test passes
+3. Use the `MemberDao` method in the `handleRequest()` method in the `DeleteMemberActivity` class
+4. Make sure `DeleteMemberActivityTest` passes now
+5. Run the `Phase1Test` make sure it passes!
 
 GOAL: Your `DeleteMemberActivity` is working!
 
@@ -154,31 +147,6 @@ case, you'll catch the exception and carry on.
 1. Verify that `InviteDaoTest` (implemented for you) passes
 1. Update `DeleteMemberActivity` to use `InviteDao` to fetch and delete the
    invitations.
-    1. To fetch the invites, use `InviteDao.getInvitesSentToMember()`
-        1. Use your implementation of `InviteDao.deleteInvite()` to conditionally
-           delete each invite.
-        1. HINT: Because you're adding a com.amazon.ata.dynamodbdeleteiterators.classroom.dependency here, you'll might need
-           to do a couple of things to avoid getting a `NullPointerException`
-           when running this unit test:
-               1. Add the following to the `DeleteMemberActivityTest` to make sure
-                  that `DeleteMemberActivity` gets its proper `InviteDao` mock
-                  injected (rather than `null`):
-                  ```{.java}
-                  @Mock
-                  private InviteDao inviteDao;
-                  ```
-               1. You may need to rebuild your project to re-generate
-                  Dagger classes.
-    1. NOTE: You'll need to update `DeleteMemberActivityTest` to provide the
-       `InviteDao` com.amazon.ata.dynamodbdeleteiterators.classroom.dependency to `DeleteMemberActivity` under test.
-       Follow the pattern and add an `InviteDao` mock that gets injected
-       as `MemberDao` does.
-        1. For completeness, you should also stub the response
-           that the `inviteDao` mock should return to `getInvitesSentToMember()`
-           -- feel free to stub it to return empty list, but more realistic
-           would be to return an Invite and verify that `deleteInvite()`
-           is also called with that invite's event/member IDs.
-
 GOAL: `DeleteMemberActivity` also deletes invites to the deleted member, but
 only if the invite hasn't been accepted.
 
@@ -276,33 +244,3 @@ Phase 4 is complete when:
   `CanceledInvite`s in these cases (**using an iterator**).
 - `Phase4Test` tests pass
 
-## Extensions
-
-These should be doable independently, so do not need to be done in any order.
-
-1. Allow your `Invite.isAttending` to be null if invitee hasn't responded yet, to
-   differentiate between "I haven't answered yet" and "I'm not coming". You might
-   need to change your conditional delete logic in `InviteDao` to accommodate this.
-   Hint: To keep it simple, you might be able to use a `ComparisonOperator` on your
-   `ExpectedAttributeValue` to indicate that `isAttending` must NOT be true
-   (but could be null or false).
-   Add a relevant integration test to verify this case.
-1. To make the DynamoDB interaction a little more efficient in
-   `GetInvitesForMemberActivity`, if an `Invite` is already marked as canceled,
-   exclude that `Invite`'s `Event` from the collection of event IDs passed into
-   `EventDao.getEvents()`. (Only query the events for invites that are still
-   marked as not-canceled). Write a corresponding integration test (either in
-   a new class or in the Phase4 test, as you prefer).
-1. Implement "cold storage" for the older events (archiving the events
-   that are less likely to be accessed in a separate table (or datastore)
-   from more current events). This reduces the size of the actively accessed
-   table, which can decrease costs.
-
-   Add an Activity to scan through all existing events. All of the events that 
-   are over 30 days old should be removed from the Events table and added to a 
-   PastEvents table. You'll need to create the PastEvents table yourself in the 
-   AWS console. We recommend creating the PastEvent first, and 
-   only after that succeeds, delete from the Events table. This way, there's less 
-   risk of  losing data. Add relevant unit and integration tests.
-1. Similarly, archive old invites to "cold storage" to store invites for
-   events more than 30 days in the past. Add unit and integration tests.
