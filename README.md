@@ -46,24 +46,13 @@ that our service supports. That Activity may depend on several of
 use cases. Each DAO is responsible for one model type, and only interacts
 with that model's DynamoDB table.
 
-Disclaimer: One difference that you'll notice here is that our Activity
-classes don't yet accept/return Response/Result objects. They're
-accepting/returning individual values. We'll do this until it's time to
-create our service infrastructure and create the necessary models.
-That retrofit is beyond the scope of this activity, but will be fairly
-easily accomplished in the Activity classes themselves when the time comes.
-
-You'll primarily be updating DAO and Activity code, but will touch a few tests
-as well, where appropriate (we'll guide you!).
+You'll primarily be updating DAO and Activity code.
 
 For each "Phase" of the activity, there's a test that
 ensure you've satisfied the requirements for that phase. Also make
 sure that the relevant unit tests for the classes you're working on are
 passing (typically one Activity and 1-3 DAOs).
 
-Helpful hint: If a test is failing for one of the phases, and you want to
-see more about the test failure, use the file URL that is printed out on the commandline
-to see more detail!
 
 ## Phase 0: Preliminaries
 
@@ -109,7 +98,6 @@ GOAL: Your `DeleteMemberActivity` is working!
 
 Phase 1 is complete when:
 - You've written a happy path (member is deleted) `MemberDao` unit
-  test for `deletePermanently()`, and the test passes
 - `DeleteMemberActivityTest` tests pass
 - `Phase1Test` tests pass
 
@@ -144,7 +132,6 @@ case, you'll catch the exception and carry on.
    an `Invite` by `eventId` (the partition key) and `memberId` (sort key),
    only if `isAttending` is false. Take a look at [AttributeValue's Javadoc](https://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/com/amazonaws/services/dynamodbv2/model/AttributeValue.html)
    to see how to create a boolean attribute type.
-1. Verify that `InviteDaoTest` (implemented for you) passes
 1. Update `DeleteMemberActivity` to use `InviteDao` to fetch and delete the
    invitations.
 GOAL: `DeleteMemberActivity` also deletes invites to the deleted member, but
@@ -152,7 +139,6 @@ only if the invite hasn't been accepted.
 
 Phase 2 is complete when:
 - You've implemented `deleteInvite()`
-- `InviteDaoTest` passes
 - `DeleteMemberActivityTest` tests still all pass
 - `Phase2Test` tests pass
 
