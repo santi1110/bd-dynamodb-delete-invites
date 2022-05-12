@@ -39,7 +39,7 @@ entity types. The relevant cases at this point are:
     * GetInvite: by event ID + member ID
     * GetInvitesForMember: returns List of Invites **sent to** a member
 
-The code base follows the Activity-DAO-DynamoDBMapper pattern that we've come
+The code base follows the **Activity-DAO-DynamoDBMapper** pattern that we've come
 to know and love. The various Activity classes each implement one operation
 that our service supports. That Activity may depend on several of
 `MemberDao`'s, `EventDao`'s, `InviteDao`'s methods to accomplish their
